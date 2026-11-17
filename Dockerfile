@@ -12,9 +12,10 @@ WORKDIR /var/www/html
 COPY . .
 
 RUN sed -ri 's!/var/www/html!/var/www/html/public!g' \
-        /etc/apache2/sites-available/*.conf /etc/apache2/apache2.conf \
-    && sed -ri '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' \
-        /etc/apache2/apache2.conf \
+        /etc/apache2/sites-available/000-default.conf \
+    && printf '<Directory /var/www/html/public>\n    AllowOverride All\n    Require all granted\n</Directory>\n' \
+        > /etc/apache2/conf-available/laravel.conf \
+    && a2enconf laravel \
     && mkdir -p bootstrap/cache storage/framework/cache/data \
         storage/framework/sessions storage/framework/views storage/logs \
     && composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader \
