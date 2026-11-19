@@ -12,9 +12,10 @@ WORKDIR /var/www/html
 COPY . .
 COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN mkdir -p bootstrap/cache storage/framework/cache/data \
-        storage/framework/sessions storage/framework/views storage/logs \
-    && composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader \
-    && chown -R www-data:www-data storage bootstrap/cache
+RUN mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs
+
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 CMD sh -c 'port="${PORT:-10000}"; sed -i "s/Listen 80/Listen ${port}/" /etc/apache2/ports.conf; sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${port}>/" /etc/apache2/sites-available/000-default.conf; exec apache2-foreground'
