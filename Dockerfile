@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libonig-dev libxml2-dev libcurl4-openssl-dev unzip git \
@@ -15,7 +15,7 @@ COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs
 
 RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction \
-        --no-progress --optimize-autoloader --ignore-platform-reqs
+        --no-progress --optimize-autoloader
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
