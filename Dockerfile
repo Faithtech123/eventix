@@ -14,7 +14,8 @@ COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 RUN mkdir -p bootstrap/cache storage/framework/cache/data storage/framework/sessions storage/framework/views storage/logs
 
-RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction --optimize-autoloader
+RUN composer install --no-dev --no-scripts --prefer-dist --no-interaction \
+        --no-progress --optimize-autoloader --ignore-platform-reqs
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
